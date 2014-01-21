@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="metaMovie" default="run">
+
+	<!-- Project Package & Version -->
+	<property name="project.package" value="au.net.asoftware.metamovie" />
+	<property name="project.version" value="1.0" />
+	<property name="main-class" value="${project.package}.Main" />
+	<property name="properties.file" value="${ant.project.name}.properties" />
+
+
+	<!-- Sources Directories -->
+	<property name="src.dir" value="src" />
+	<property name="test.dir" value="test" />
+
+	<!-- Assets & Resources -->
+	<property name="build.dir" value="build" />
+	<property name="classes.dir" value="${build.dir}/class" />
+	<property name="classes.test.dir" value="${build.dir}/test" />
+	<property name="jar.dir" value="${build.dir}/jar" />
+	<property name="doc.dir" value="doc" />
+	<property name="lib.dir" value="lib" />
+	<property name="log.dir" value="log" />
+	<property name="lib-src.dir" value="lib-src" />
+	<property name="dist.dir" value="dist" />
+	<property name="script.dir" value="scripts" />
+	<property name="test.reports" location="testreport" />
+
+	<path id="classpath.base" />
+	<path id="compile.classpath">
+		<fileset dir="${lib.dir}" includes="*.jar" />
+		<pathelement location="${test.dir}" />
+		<pathelement location="${src.dir}" />
+		<pathelement location="${classes.dir}" />
+		<pathelement location="${classes.test.dir}" />
+		<path refid="classpath.base" />
+	</path>
+	
+	<ivy:settings file="ivysettings.xml"/>
+
+	<!-- Dependancies Management With apache-ivy -->
+	<target name="resolve" depends="init" description="retrieve dependencies with ivy">
+		<ivy:retrieve conf="sources" pattern="lib-src/[artifact](-[classifier]).[ext]" />
+		<ivy:retrieve conf="binaries" pattern="lib/[artifact](-[classifier]).[ext]" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+		<delete dir="${test.reports}" />
+		<delete dir="${doc.dir}" />
+		<delete dir="${dist.dir}" />
+		<delete dir="${log.dir}" />
+	</target>
+
+	<target name="clean-all" depends="clean">
+		<delete dir="${lib.dir}" />
+		<delete dir="${lib-src.dir}" />
+		<delete dir="${doc.dir}" />
+		<delete dir="${log.dir}" />
+		<ivy:cleancache />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${test.reports}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${classes.test.dir}" />
+		<mkdir dir="${lib.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${log.dir}" />
+	</target>
+
+	<target name="build-src" depends="resolve,clean,init">
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}" debug="true" debuglevel="lines,source">
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+
+	<target name="build-test" depends="resolve,clean,init">
+		<javac includeantruntime="false" srcdir="${test.dir}" destdir="${classes.dir}">
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+
+
+	<target name="jar" depends="build-src">
+		<tstamp>
+			<format property="build.date" pattern="EEEE, d MMMM yyyy" />
+			<format property="build.time" pattern="hh:mm a" />
+		</tstamp>
+
+		<copy todir="${classes.dir}">
+			<fileset dir="src" excludes="**/*.java" />
+		</copy>
+
+		<path id="build-classpath">
+			<fileset dir=".">
+				<include name="lib/*.jar" />
+			</fileset>
+		</path>
+
+		<manifestclasspath property="lib.list" jarfile="${build.dir}/${jar.file}">
+			<classpath refid="build-classpath" />
+		</manifestclasspath>
+
+		<jar destfile="${jar.dir}/${ant.project.name}.jar">
+			<fileset dir="${classes.dir}" />
+			<!--
+	            <fileset dir=".">
+	                <include name="lib/*.jar" />
+	            </fileset>
+	            -->
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Specification-Title" value="${ant.project.name}" />
+				<attribute name="Specification-Version" value="${project.version}" />
+				<attribute name="Specification-Vendor" value="mfTechnology" />
+				<attribute name="Implementation-Title" value="common" />
+				<attribute name="Implementation-Version" value="${project.version} - built at ${build.time} on ${build.date} " />
+				<attribute name="Implementation-Vendor" value="Michael Fenney" />
+				<attribute name="Main-Class" value="${main-class}" />
+				<attribute name="Class-Path" value=". ${lib.list}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<path id="test.classpath">
+		<pathelement location="lib/junit.jar" />
+		<pathelement location="${classes.dir}" />
+	</path>
+	
+	<target name="junit" depends="compile">
+	    <junit printsummary="yes" fork="true" haltonfailure="no">
+	    	
+	    	<classpath>
+	    		<path refid="test.classpath" />
+	    		<pathelement location="${test.classes}" />
+	    	</classpath>
+	    	
+	      
+	      <formatter type="xml" />
+	      <formatter type="plain" />
+	      
+	      
+	    	<batchtest fork="yes" todir="${test.reports}">
+	        <fileset dir="${test.dir}">
+	          <include name="**/*Test*.java" />
+	        </fileset>
+	      </batchtest>
+	    </junit>
+	  </target>
+
+	
+	<target name="run" depends="jar">
+
+		<!-- Copy properties file into users home directory before execution
+		<copy file="cfg/${properties.file}" todir="${user.home}"/> -->
+
+		<path refid="compile.classpath" />
+		<java fork="true" classname="${main-class}">
+			<classpath>
+				<path refid="compile.classpath" />
+				<path location="${jar.dir}/${ant.project.name}.jar" />
+			</classpath>
+			<arg value="Mick" />
+		</java>
+	</target>
+
+	<target name="compile" depends="clean,build-src,build-test" />
+
+</project>

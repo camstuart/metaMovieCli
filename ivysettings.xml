@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ivysettings>
+
+	<settings defaultResolver="spring-chain" />
+	<resolvers>
+		<chain name="spring-chain">
+			<url name="com.springsource.repository.bundles.release">
+				<ivy
+					pattern="http://repository.springsource.com/ivy/bundles/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<artifact
+					pattern="http://repository.springsource.com/ivy/bundles/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+			</url>
+			<url name="com.springsource.repository.bundles.external">
+				<ivy
+					pattern="http://repository.springsource.com/ivy/bundles/external/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<artifact
+					pattern="http://repository.springsource.com/ivy/bundles/external/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+			</url>
+			<url m2compatible="true" name="xugglecode">
+				<ivy
+					pattern="http://xuggle.googlecode.com/svn/trunk/repo/share/java/[organization]/[artifact]/[revision]/ivy-[revision].xml" />
+				<ivy
+					pattern="http://xuggle.googlecode.com/svn/trunk/repo/share/java/[organization]/[artifact]/ivy-[revision].xml" />
+				<artifact
+					pattern="http://xuggle.googlecode.com/svn/trunk/repo/share/java/[organisation]/[artifact]/[revision]/[artifact](-[revision]).[ext]" />
+				<artifact
+					pattern="http://xuggle.googlecode.com/svn/trunk/repo/share/java/[organisation]/[artifact]/[artifact](-[revision]).[ext]" />
+				<artifact
+					pattern="http://xuggle.googlecode.com/svn/trunk/repo/share/java/[organisation]/[artifact](-[revision]).[ext]" />
+				<artifact
+					pattern="http://xuggle.googlecode.com/svn/trunk/repo/share/java/[artifact](-[revision]).[ext]" />
+				<artifact
+					pattern="http://build.xuggle.com/view/Stable/job/red5_jdk6_stable/lastSuccessfulBuild/artifact/workingcopy/dist/[artifact].[ext]" />
+			</url>
+			<ibiblio name="ibiblio" m2compatible="true" />
+		</chain>
+
+
+		
+
+
+	</resolvers>
+
+</ivysettings>

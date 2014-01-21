@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+    Java Dependancies For The Cam Squared Foundation Libraries.
+    When running inside the salmat network use the following environment variable
+    
+    ANT_OPTS=-Dhttp.proxyHost=equwsgateway.salmat.com.au -Dhttp.proxyPort=8080 -Dhttp.proxyUser=YOUR_USERNAME -Dhttp.proxyPassword=YOUR_PASSWORD -Dhttps.proxyHost=equwsgateway.salmat.com.au -Dhttps.proxyPort=8443
+    Note: Under unix, there should be no spaces between these directives
+-->
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+    <info
+        organisation="MFT"
+        module="au.net.mft.metamovie"
+        status="integration">
+	</info>
+	
+	<configurations>
+        <conf name="sources"  description="Source jars"/>
+        <conf name="binaries" description="binary jars"/>
+    </configurations>
+	
+	<dependencies>
+	    <!-- Downloadable from the online maven repository -->
+        
+        <dependency org="com.google.code.gson" name="gson" rev="2.2.2" conf="binaries->default" />
+        <dependency org="xuggle" name="xuggle-xuggler" rev="5.4" conf="binaries->default" />
+        <dependency org="org.apache.commons" name="commons-lang3" rev="3.1" conf="binaries->default"/>
+        <dependency org="commons-cli" name="commons-cli" rev="1.2" conf="binaries->default"/>
+        <dependency org="ch.qos.logback" name="logback-classic" rev="1.0.1" conf="binaries->default"/>
+        
+        <dependency org="junit" name="junit" rev="4.10" conf="binaries->default"/>
+        
+        <dependency org="org.mongodb" name="mongo-java-driver" rev="2.9.1" conf="binaries->default"/>
+
+
+    
+    </dependencies>
+	
+</ivy-module>
